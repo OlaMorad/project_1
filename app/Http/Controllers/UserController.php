@@ -16,8 +16,7 @@ use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Contracts\Service\Attribute\Required;
-use App\Controller\UserController\password_rule;
-
+use Illuminate\Validation\Rules\Password as Password_rule;
 class UserController extends Controller
 {
 
@@ -71,8 +70,8 @@ class UserController extends Controller
                 'email' => 'required|email|unique:users',
                 'phone' => 'unique:users',
                 'password' => [
-                    'required', 'confirmed','min:8',
-                    // password_rule::min(8)->mixedCase()->numbers()->symbols()
+                    'required', 'confirmed',
+                    password_rule::min(8)->mixedCase()->numbers()->symbols()
                 ],
                
 

@@ -9,8 +9,15 @@ class EventTypeController extends Controller
 {
     public function show_all_event_type()
     {
-        $event_type=Event_Type::all();
-        return response()->json(['data'=> $event_type,'massege'=>'ok','stauts'=>200]);
+        $event_type = Event_Type::with('images')->get();
+        // $event_type=Event_Type::all();
+        // Modify the structure of the data
+        $modified_event_types = $event_type->map(function ($event_type) {
+            // Unset imageable_id and imageable_type from the images object
+            unset($event_type->images->imageable_id, $event_type->images->imageable_type);
+            return $event_type;
+        });
+        return response()->json(['data'=> $modified_event_types,'massege'=>'ok','stauts'=>200]);
     }
     public function show($id)
     {

@@ -16,7 +16,9 @@ class ImageSeeder extends Seeder
     {
        $photo = Event_Type::find(1);
         $image = new Image();
-        $image->url = 'images\sunflower-1127174_1280.jpg';
+        $image->path = 'images\sunflower-1127174_1280.jpg';
+        $image->imageable_type ='App\Models\Event_Type';
+        $image->imageable_id = 1;
         $image->save();
 
         $photo->images()->save($image);
