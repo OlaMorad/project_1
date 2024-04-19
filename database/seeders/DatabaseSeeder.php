@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call(UsersSeeder::class);
        $this->call(EventTypeSeeder::class);
-    //   $this->call(ImageSeeder::class);
+        $this->call(CitySeerder::class);
 
 
     }

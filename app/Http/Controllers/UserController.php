@@ -73,9 +73,11 @@ class UserController extends Controller
                     'required', 'confirmed',
                     password_rule::min(8)->mixedCase()->numbers()->symbols()
                 ],
-               
-
+             
             ]);
+           
+
+           
             // Create a new user
             $user = User::create([
                 'name' => $validatedData['name'],

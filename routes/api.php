@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -53,4 +54,10 @@ Route::Post('verifyEmail', [UserController::class, 'verifyEmail']);
 Route::controller(EventTypeController::class)->group(function () {
     Route::get('event_types/{id}', 'show');
     Route::get('show_all_event_type', 'show_all_event_type');
+    Route::get('halls_by_eventType/{id}','halls');
+});
+Route::controller(CityController::class)->group(function () {
+    Route::get('show_all_cities', 'show_all_cities');
+    Route::get('halls_by_cities/{id}', 'halls');
+
 });

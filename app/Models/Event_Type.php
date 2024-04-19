@@ -21,4 +21,8 @@ class Event_Type extends Model
     {
         return $this->morphOne(Image::class, 'imageable');
     }
+    public function halls()
+    {
+        return $this->belongsToMany(Hall::class, 'events');
+    }
 }
