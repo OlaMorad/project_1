@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users',function($table){
-            $table->string('google_id')->nullable();
+        Schema::create('events', function (Blueprint $table) {
+            $table->id();
+            $table->integer('event_type_id');
+            $table->integer('hall_id');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        
-     Schema::dropIfExists('users');
-    
+        Schema::dropIfExists('events');
     }
 };

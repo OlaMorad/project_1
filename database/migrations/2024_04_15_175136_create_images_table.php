@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->nullableMorphs('morphable');
-            $table->string('url');
-            $table->unsignedBigInteger('imageable_id')->default('1');
-            $table->string('imageable_type')->default('App\Models\Event_Type');
+            $table->morphs('imageable');
+            $table->string('path');
+        //    $table->unsignedBigInteger('imageable_id')->default('1');
+         //   $table->string('imageable_type')->default('App\Models\Event_Type');
         //   //  $table->unsignedBigInteger('event_type_id');
         //    $table->foreignId('event_type_id')->references('id')->on('event_types');
             $table->timestamps();

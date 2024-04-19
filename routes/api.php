@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -39,16 +40,24 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('/auth/google/callback', 'handleGoogleCallback')->name('/auth/google/callback');
 });
 // reset password api
-Route::controller(ResetPasswordController::class)->group(function(){
+Route::controller(ResetPasswordController::class)->group(function () {
     Route::post('password/email', 'ForgotPassword')->name('password.email');
     Route::post('/password/resend', 'resendCode')->name('resend.code');
-    Route::post('password/check/code','CheckCode')->name('password.check.code');
+    Route::post('password/check/code', 'CheckCode')->name('password.check.code');
     Route::post('password/reset', 'UserRestPassword')->name('password.rest');
 });
 // email verification api
-Route::Post('verifyEmail',[UserController::class, 'verifyEmail']);
+Route::Post('verifyEmail', [UserController::class, 'verifyEmail']);
 // Route::post('/sendVerificationCode', [VerificationController::class, 'sendVerificationCode']);
 //Route::post('/verify', [VerificationController::class, 'verify']);
 
+Route::controller(EventTypeController::class)->group(function () {
+    Route::get('event_types/{id}', 'show');
+    Route::get('show_all_event_type', 'show_all_event_type');
+    Route::get('halls_by_eventType/{id}','halls');
+});
+Route::controller(CityController::class)->group(function () {
+    Route::get('show_all_cities', 'show_all_cities');
+    Route::get('halls_by_cities/{id}', 'halls');
 
-Route::get('event_types/{id}',[EventTypeController::class, 'show']);
+});

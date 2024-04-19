@@ -19,6 +19,10 @@ class Event_Type extends Model
     // }
     public function images()
     {
-        return $this->morphOne('App\Models\Image', 'imageable');
+        return $this->morphOne(Image::class, 'imageable');
+    }
+    public function halls()
+    {
+        return $this->belongsToMany(Hall::class, 'events');
     }
 }
