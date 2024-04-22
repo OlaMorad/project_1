@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Hall extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'capacity', 'descrebtion'];
+    protected $fillable = ['name', 'capacity', 'description', 'location', 'city_id', 'price'];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 
     public function images()
     {

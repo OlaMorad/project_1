@@ -30,14 +30,14 @@ class CitySeerder extends Seeder
         ];
         // Define the paths to your images
         $imagePaths = [
-            'images\wedding.jpg',
-            'images\sunflower-1127174_1280.jpg',
-            'images\engagment.jpg',
-            'images\birthday.jpg',
-            'public\images\wedding2.jpg',
-            'images\table (1).jpg',
-            'images\love.jpg',
-            'images\photo_1.jpg'
+            'https://c4.wallpaperflare.com/wallpaper/285/471/731/night-cyberpunk-futuristic-city-artwork-wallpaper-preview.jpg',
+            'https://c4.wallpaperflare.com/wallpaper/953/495/816/anime-anime-girls-barefoot-bubbles-wallpaper-preview.jpg',
+            'https://c0.wallpaperflare.com/preview/285/1009/176/concery-wallpaper-festival-party.jpg',
+            'https://c4.wallpaperflare.com/wallpaper/222/981/89/candles-cake-cake-bokeh-wallpaper-preview.jpg',
+            'https://c4.wallpaperflare.com/wallpaper/330/474/532/macro-music-music-blur-wallpaper-preview.jpg',
+            'https://c4.wallpaperflare.com/wallpaper/832/200/979/life-concert-music-party-wallpaper-preview.jpg',
+            'https://c0.wallpaperflare.com/preview/22/220/959/audio-audio-mixer-close-up-club.jpg',
+            'https://c4.wallpaperflare.com/wallpaper/291/819/697/illustration-city-anime-painting-wallpaper-preview.jpg',
             // Add more image paths as needed
         ];
         // Loop through each event type and image path simultaneously

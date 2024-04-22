@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersSeeder::class);
        $this->call(EventTypeSeeder::class);
         $this->call(CitySeerder::class);
+        $this->call(HallSeeder::class);
+        $this->call(EventsSeeder::class);
 
 
     }
