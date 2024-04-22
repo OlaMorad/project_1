@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('city_id')->references('id')->on('cities');
             $table->string('capacity');
-            $table->string('descrebtion');
+            $table->string('description');
             $table->string('location');
+            $table->double('price');
             $table->timestamps();
         });
     }

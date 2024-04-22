@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class City extends Model
 {
     use HasFactory;
-    protected $fillable=['name','hall_id'];
+    protected $fillable=['name'];
     protected $hidden = [
         'created_at',
         'updated_at',

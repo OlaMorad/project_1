@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Contracts\Service\Attribute\Required;
 use Illuminate\Validation\Rules\Password as Password_rule;
+use Illuminate\Validation\ValidationException;
+
 class UserController extends Controller
 {
 
@@ -76,8 +78,6 @@ class UserController extends Controller
              
             ]);
            
-
-           
             // Create a new user
             $user = User::create([
                 'name' => $validatedData['name'],
@@ -95,6 +95,9 @@ class UserController extends Controller
             // Remove verified_code from the response
             unset($user['verified_code']);
             return response()->json(['data'=>$user, 'message' => 'User registered successfully. Please check your email for verification' ,'status'=> 'success']);
+         } catch (ValidationException $e) {
+                    // If validation fails, return validation errors
+            return response()->json(['data' => $e->validator->errors(), 'message' => 'Validation failed', 'status' => false], 422);
         } catch (Exception $e) {
             return response()->json(['data' => $e->getMessage(), 'message' => 'an exception occured', 'status' => 400]);
         }
@@ -245,6 +248,7 @@ class UserController extends Controller
     {
         try {
             $user = User::find(auth()->user()->id);
+            unset($user['verified_code']);
             return $this->jsonResponse($user, 'this is your profile', 200);
         } catch (Exception $e) {
             return $this->jsonResponse('an exception occured', $e->getMessage(), 400);

@@ -6,7 +6,9 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\HallController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VerificationController;
 
 
@@ -61,3 +63,16 @@ Route::controller(CityController::class)->group(function () {
     Route::get('halls_by_cities/{id}', 'halls');
 
 });
+
+//HALLS{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}
+//search for halls
+Route::get('search', [SearchController::class, 'search']);
+Route::controller(HallController::class)->group(function () {
+    //get all Halls
+    Route::get('show_all_halls', 'show_all_halls');
+    //insert new hall
+    Route::post('store', 'store')->name('store');
+    //delete hall
+    Route::delete('halls/{id}', 'delete_hall');
+});
+Route::post('/cities', [CityController::class, 'store']);
