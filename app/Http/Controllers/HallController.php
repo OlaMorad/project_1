@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hall;
+use App\Models\Image;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class HallController extends Controller
@@ -32,13 +34,42 @@ class HallController extends Controller
                 'capacity' => 'required|integer',
                 'description' => 'nullable|string',
                 'location' => 'required|string',
+                'price' => 'required',
+                'image_url' => 'nullable|url','event_type_ids' => 'nullable|array', // Array of event type IDs
+                'event_type_ids.*' => 'exists:event_types,id', // Each event type ID must exist
             ]);
         } catch (ValidationException $e) {
             // If validation fails, return validation errors
             return response()->json(['data' => $e->validator->errors(), 'message' => 'Validation failed', 'status' => false], 422);
             // create new hall
-            $hall = Hall::create($validatedData);
-
+            $hall = Hall::create([
+                'name' => $request->name,
+                'city_id' => $request->city_id,
+                'capacity' => $request->capacity,
+                'description' => $request->description,
+                'location' => $request->location,
+                'price'=>$request->price,
+            ]);
+            $imagePath = $request->image_url;
+            // Create a new image record
+            $image = new Image();
+            $image->path = $imagePath;
+            $image->imageable_type = 'App\Models\Hall';
+            $image->imageable_id = $hall->id;
+            $hall->images()->save($image);
+            // $image->save();
+            // Remove unwanted fields from the output
+            unset($hall->images->imageable_type);
+            unset($hall->images->imageable_id);
+if ($request->has('event_type_ids')) {
+    foreach ($request->event_type_ids as $eventTypeId) {
+        // Insert a new event into the database
+        DB::table('events')->insert([
+            'hall_id' => $hall->id,
+            'event_type_id' => $eventTypeId,
+                    ]);
+    }}
+            
             return response()->json([
                 'message' => 'Hall created successfully',
                 'hall' => $hall

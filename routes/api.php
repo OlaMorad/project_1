@@ -61,6 +61,7 @@ Route::controller(EventTypeController::class)->group(function () {
 Route::controller(CityController::class)->group(function () {
     Route::get('show_all_cities', 'show_all_cities');
     Route::get('halls_by_cities/{id}', 'halls');
+    Route::post('add_city',  'store')->middleware('auth:admin');
 
 });
 
@@ -71,8 +72,7 @@ Route::controller(HallController::class)->group(function () {
     //get all Halls
     Route::get('show_all_halls', 'show_all_halls');
     //insert new hall
-    Route::post('store', 'store')->name('store');
+    Route::post('store', 'store')->name('store')->middleware('auth:admin');
     //delete hall
-    Route::delete('halls/{id}', 'delete_hall');
+    Route::delete('halls/{id}', 'delete_hall')->middleware('auth:admin');
 });
-Route::post('/cities', [CityController::class, 'store']);
