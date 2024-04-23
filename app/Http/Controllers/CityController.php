@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class CityController extends Controller
 {
@@ -42,10 +43,16 @@ class CityController extends Controller
     public function store(Request $request)
     {
         // Validate form data
-        $validate = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'image_url' => 'required|url',
         ]);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json(['data' => $validator->errors(), 'message' => 'Incorrect or missing information', 'status' => 400]);
+        }
+
         // Create a new city record
         $city = City::create([
             'name' => $request->name,
@@ -59,7 +66,11 @@ class CityController extends Controller
         $image->imageable_id = $city->id;
         $city->images()->save($image);
         // $image->save();
-        $city = City::with('images')->find($city->id);
-        return response()->json(['message' => 'City created successfully', 'city' => $city], 201);
+        // Remove unwanted fields from the output
+        unset($city->images->imageable_type);
+        unset($city->images->imageable_id);
+
+        return response()->json(['message' => 'City created successfully', 'city' => $city, 'stauts' => 201]);
     }
+    
 }
