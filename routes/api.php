@@ -35,6 +35,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('logout', 'logout')->name('logout')->middleware('auth');
     Route::post('refresh', 'refresh')->name('refresh')->middleware('auth');
     Route::get('Profile', 'Profile')->name('user.profile')->middleware('auth');
+    Route::post('update','update')->middleware('auth');
 });
 // login with google
 Route::controller(GoogleController::class)->group(function () {
@@ -75,4 +76,8 @@ Route::controller(HallController::class)->group(function () {
     Route::post('store', 'store')->name('store')->middleware('auth:admin');
     //delete hall
     Route::delete('halls/{id}', 'delete_hall')->middleware('auth:admin');
+    //show hall
+    Route::get('show_hall/{id}','get');
+    Route::get('show_count_halls', 'CountHalls');
+
 });

@@ -11,16 +11,57 @@ use Illuminate\Validation\ValidationException;
 
 class HallController extends Controller
 {
+    public function CountHalls()
+    {
+        try {
+            // Retrieve all halls
+            $halls = Hall::all();
+
+            // Count the total number of halls
+            $totalHalls = $halls->count();
+
+            // Return the halls data along with the total number of halls
+            return response()->json([
+                'total_halls' => $totalHalls,
+                // 'message' => 'OK',
+                // 'status' => 200
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'An exception occurred', 'status' => 400]);
+        }
+    }
     public function show_all_halls()
     {
-        $halls = Hall::with('images')->get();
-        return response()->json(['data' => $halls, 'message' => 'ok', 'stauts' => 200]);
+        try {
+            $halls = Hall::with('images')->get();
+            $Halls = $halls->map(function ($hall) {
+                // Remove imageable_type and imageable_id from images
+                $hall->images()->get();
+                unset($hall->images->imageable_type);
+                unset($hall->images->imageable_id);
+                unset($hall->deleted_at);
+                return $hall;
+            });
+
+
+            return response()->json(['data' => $Halls, 'message' => 'ok', 'stauts' => 200]);
+        } catch (Exception $e) {
+            return response()->json(['data' => $e->getMessage(), 'message' => 'an exception occured', 'status' => 400]);
+        }
     }
     public function get($id)
     {
-        $hall = Hall::with('images')->find($id);
-        if (!$hall) {
-            return response()->json(['message' => 'hall not found', 'stauts' => 404]);
+        try {
+            $hall = Hall::with('images')->find($id);
+            if (!$hall) {
+                return response()->json(['message' => 'hall not found', 'stauts' => 404]);
+            }
+            unset($hall->images->imageable_type);
+            unset($hall->images->imageable_id);
+            unset($hall->deleted_at);
+            return response()->json(['data' => $hall, 'message' => 'ok', 'stauts' => 200]);
+        } catch (Exception $e) {
+            return response()->json(['data' => $e->getMessage(), 'message' => 'an exception occured', 'status' => 400]);
         }
     }
 
@@ -35,7 +76,7 @@ class HallController extends Controller
                 'description' => 'nullable|string',
                 'location' => 'required|string',
                 'price' => 'required',
-                'image_url' => 'nullable|url','event_type_ids' => 'nullable|array', // Array of event type IDs
+                'image_url' => 'nullable|url', 'event_type_ids' => 'nullable|array', // Array of event type IDs
                 'event_type_ids.*' => 'exists:event_types,id', // Each event type ID must exist
             ]);
         } catch (ValidationException $e) {
@@ -48,7 +89,7 @@ class HallController extends Controller
                 'capacity' => $request->capacity,
                 'description' => $request->description,
                 'location' => $request->location,
-                'price'=>$request->price,
+                'price' => $request->price,
             ]);
             $imagePath = $request->image_url;
             // Create a new image record
@@ -61,15 +102,16 @@ class HallController extends Controller
             // Remove unwanted fields from the output
             unset($hall->images->imageable_type);
             unset($hall->images->imageable_id);
-if ($request->has('event_type_ids')) {
-    foreach ($request->event_type_ids as $eventTypeId) {
-        // Insert a new event into the database
-        DB::table('events')->insert([
-            'hall_id' => $hall->id,
-            'event_type_id' => $eventTypeId,
+            if ($request->has('event_type_ids')) {
+                foreach ($request->event_type_ids as $eventTypeId) {
+                    // Insert a new event into the database
+                    DB::table('events')->insert([
+                        'hall_id' => $hall->id,
+                        'event_type_id' => $eventTypeId,
                     ]);
-    }}
-            
+                }
+            }
+
             return response()->json([
                 'message' => 'Hall created successfully',
                 'hall' => $hall

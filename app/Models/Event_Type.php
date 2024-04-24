@@ -23,6 +23,6 @@ class Event_Type extends Model
     }
     public function halls()
     {
-        return $this->belongsToMany(Hall::class, 'events');
+        return $this->belongsToMany(Hall::class, 'events', 'event_type_id', 'hall_id');
     }
 }

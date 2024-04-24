@@ -20,6 +20,8 @@ class CityController extends Controller
             $modified_cities = $cities->map(function ($cities) {
                 // Unset imageable_id and imageable_type from the images object
                 unset($cities->images->imageable_id, $cities->images->imageable_type);
+                unset($cities->deleted_at);
+
                 return $cities;
             });
             return response()->json(['data' => $modified_cities, 'massege' => 'ok', 'stauts' => 200]);
@@ -34,8 +36,21 @@ class CityController extends Controller
             if (!$city) {
                 return response()->json(['message' => 'City not found', 'status' => 400]);
             }
-            $halls = $city->halls;
-            return response()->json(['data' => $halls, 'message' => 'ok', 'status' => 200]);
+            $halls = $city->halls()->with('images')->get();
+            if ($halls->isEmpty()) {
+                return response()->json(['message' => 'There are no halls for this City', 'status' => 200]);
+            }
+            $Halls = $halls->map(function ($hall) {
+                // Remove imageable_type and imageable_id from images
+                $hall->images()->get();
+                unset($hall->images->imageable_type);
+                unset($hall->images->imageable_id);
+                unset($hall->deleted_at);
+
+                return $hall;
+            });
+
+            return response()->json(['data' => $Halls, 'message' => 'ok', 'status' => 200]);
         } catch (Exception $e) {
             return response()->json(['data' => 'an exception occured', 'message' => $e->getMessage(), 'status' => 400]);
         }
@@ -69,8 +84,8 @@ class CityController extends Controller
         // Remove unwanted fields from the output
         unset($city->images->imageable_type);
         unset($city->images->imageable_id);
+        unset($city->deleted_at);
 
         return response()->json(['message' => 'City created successfully', 'city' => $city, 'stauts' => 201]);
     }
-    
 }

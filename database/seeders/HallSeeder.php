@@ -127,6 +127,8 @@ class HallSeeder extends Seeder
                 'city_id' => 7, // City ID 7
                 'price' => 70.00, // Price per hour for Hall N
             ],
+            
+            
             // Add more halls for the remaining cities
         ];
         // Define image paths for each hall
@@ -150,8 +152,9 @@ class HallSeeder extends Seeder
         // Loop through each hall data and image path simultaneously
         foreach ($hallsData as $index => $hallData) {
             // Create the hall
+            
             $hall = Hall::create($hallData);
-
+          //  $totalHalls = $hall->count();
             // Create an image for the hall
             $image = new Image();
             $image->path = $imagePaths[$index]; // Use the corresponding image path
