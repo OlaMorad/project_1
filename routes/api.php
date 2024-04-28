@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HallController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VerificationController;
@@ -81,3 +82,6 @@ Route::controller(HallController::class)->group(function () {
     Route::get('show_count_halls', 'CountHalls');
 
 });
+Route::post('images/upload', [ImageController::class, 'upload']);
+Route::get('images',[ImageController::class, 'index']);
+

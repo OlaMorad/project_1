@@ -18,6 +18,10 @@ class CityController extends Controller
             $cities = City::with('images')->get();
             // Modify the structure of the data
             $modified_cities = $cities->map(function ($cities) {
+                // Modify each city's images to include the asset() function
+                $cities->images->each(function ($image) {
+                    $image->path = asset($image->path);
+                });
                 // Unset imageable_id and imageable_type from the images object
                 unset($cities->images->imageable_id, $cities->images->imageable_type);
                 unset($cities->deleted_at);
@@ -57,35 +61,94 @@ class CityController extends Controller
     }
     public function store(Request $request)
     {
-        // Validate form data
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'image_url' => 'required|url',
-        ]);
+        try {
+            // Validate form data
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            ]);
 
-        // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json(['data' => $validator->errors(), 'message' => 'Incorrect or missing information', 'status' => 400]);
+            // Check if validation fails
+            if ($validator->fails()) {
+                return response()->json(['data' => $validator->errors(), 'message' => 'Incorrect or missing information', 'status' => 400]);
+            }
+
+            // Handle file upload and storage
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalName();
+            $image->move(public_path('images'), $imageName);
+            $imagePath = 'images/' . $imageName;
+
+           // Storage::putFileAs('public', $image, $imageName);
+
+            // Create a new city record
+            $city = City::create([
+                'name' => $request->name,
+                // Add other city fields if needed
+            ]);
+
+            // Create a new image record
+            $image = new Image();
+            $image->path = $imagePath;
+            $image->imageable_type = 'App\Models\City';
+            $image->imageable_id = $city->id;
+            $city->images()->save($image);
+
+            // Remove unwanted fields from the output
+            unset($city->images->imageable_type);
+            unset($city->images->imageable_id);
+            unset($city->deleted_at);
+
+            return response()->json(['message' => 'City created successfully', 'city' => $city, 'status' => 201]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'status' => 500]);
         }
+    }
 
-        // Create a new city record
-        $city = City::create([
-            'name' => $request->name,
-            // Add other city fields if needed
-        ]);
-        $imagePath = $request->image_url;
-        // Create a new image record
-        $image = new Image();
-        $image->path = $imagePath;
-        $image->imageable_type = 'App\Models\City';
-        $image->imageable_id = $city->id;
-        $city->images()->save($image);
-        // $image->save();
-        // Remove unwanted fields from the output
-        unset($city->images->imageable_type);
-        unset($city->images->imageable_id);
-        unset($city->deleted_at);
+    public function softDelete($id)
+    {
+        try {
+            $city = City::find($id);
+            if (!$city) {
+                return response()->json(['message' => 'City not found', 'status' => 404], 404);
+            }
 
-        return response()->json(['message' => 'City created successfully', 'city' => $city, 'stauts' => 201]);
+            $city->delete();
+
+            return response()->json(['message' => 'City soft deleted successfully', 'status' => 200]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'status' => 500]);
+        }
+    }
+    public function forceDelete($id)
+    {
+        try {
+            $city = City::withTrashed()->find($id);
+            if (!$city) {
+                return response()->json(['message' => 'City not found', 'status' => 404], 404);
+            }
+
+            $city->forceDelete();
+
+            return response()->json(['message' => 'City force deleted successfully', 'status' => 200]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'status' => 500]);
+        }
+    }
+
+    public function restore($id)
+    {
+        try {
+            $city = City::withTrashed()->find($id);
+            if (!$city) {
+                return response()->json(['message' => 'City not found', 'status' => 404], 404);
+            }
+
+            $city->restore();
+
+            return response()->json(['message' => 'City restored successfully', 'status' => 200]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'status' => 500]);
+        }
     }
 }

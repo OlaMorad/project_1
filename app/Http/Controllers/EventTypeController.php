@@ -17,6 +17,10 @@ class EventTypeController extends Controller
             // $event_type=Event_Type::all();
             // Modify the structure of the data
             $modified_event_types = $event_type->map(function ($event_type) {
+                // Modify each city's images to include the asset() function
+                $event_type->images->each(function ($image) {
+                    $image->path = asset($image->path);
+                });
                 // Unset imageable_id and imageable_type from the images object
                 unset($event_type->images->imageable_id, $event_type->images->imageable_type);
                 return $event_type;

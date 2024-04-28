@@ -31,13 +31,13 @@ class EventTypeSeeder extends Seeder
         ];
         // Define the paths to your images
         $imagePaths = [
-            'https://c4.wallpaperflare.com/wallpaper/285/471/731/night-cyberpunk-futuristic-city-artwork-wallpaper-preview.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/953/495/816/anime-anime-girls-barefoot-bubbles-wallpaper-preview.jpg',
-            'https://c0.wallpaperflare.com/preview/285/1009/176/concery-wallpaper-festival-party.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/222/981/89/candles-cake-cake-bokeh-wallpaper-preview.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/330/474/532/macro-music-music-blur-wallpaper-preview.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/832/200/979/life-concert-music-party-wallpaper-preview.jpg',
-            'https://c0.wallpaperflare.com/preview/22/220/959/audio-audio-mixer-close-up-club.jpg',
+            'images/photo_1.jpg',
+            'images/photo_2.jpg',
+            'images/photo_3.jpg',
+            'images/photo_4.jpg',
+            'images/photo_5.jpg',
+            'images/photo_6.jpg',
+            'images/photo_7.jpg',
             // Add more image paths as needed
         ];
 

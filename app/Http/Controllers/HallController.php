@@ -35,6 +35,10 @@ class HallController extends Controller
         try {
             $halls = Hall::with('images')->get();
             $Halls = $halls->map(function ($hall) {
+                // Modify each city's images to include the asset() function
+                $hall->images->each(function ($image) {
+                    $image->path = asset($image->path);
+                });
                 // Remove imageable_type and imageable_id from images
                 $hall->images()->get();
                 unset($hall->images->imageable_type);
@@ -56,6 +60,10 @@ class HallController extends Controller
             if (!$hall) {
                 return response()->json(['message' => 'hall not found', 'stauts' => 404]);
             }
+            // Modify each city's images to include the asset() function
+            $hall->images->each(function ($image) {
+                $image->path = asset($image->path);
+            });
             unset($hall->images->imageable_type);
             unset($hall->images->imageable_id);
             unset($hall->deleted_at);

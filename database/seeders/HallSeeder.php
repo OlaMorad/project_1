@@ -133,20 +133,20 @@ class HallSeeder extends Seeder
         ];
         // Define image paths for each hall
         $imagePaths = [
-            'https://c4.wallpaperflare.com/wallpaper/285/471/731/night-cyberpunk-futuristic-city-artwork-wallpaper-preview.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/953/495/816/anime-anime-girls-barefoot-bubbles-wallpaper-preview.jpg',
-            'https://c0.wallpaperflare.com/preview/285/1009/176/concery-wallpaper-festival-party.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/222/981/89/candles-cake-cake-bokeh-wallpaper-preview.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/330/474/532/macro-music-music-blur-wallpaper-preview.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/832/200/979/life-concert-music-party-wallpaper-preview.jpg',
-            'https://c0.wallpaperflare.com/preview/22/220/959/audio-audio-mixer-close-up-club.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/291/819/697/illustration-city-anime-painting-wallpaper-preview.jpg',
-            'https://c1.wallpaperflare.com/preview/557/365/273/antwerp-station-hall-building-station.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/500/455/679/architecture-modern-azerbaijan-town-square-wallpaper-preview.jpg',
-            'https://c1.wallpaperflare.com/preview/888/459/609/governor-s-mansion-montgomery-alabama-grand-staircase.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/76/834/475/kolkata-victoria-memorial-hall-wallpaper-preview.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/328/804/963/building-tourist-attraction-baroque-architecture-religious-institute-wallpaper-preview.jpg',
-            'https://c4.wallpaperflare.com/wallpaper/772/298/406/palace-of-versailles-hall-of-mirrors-hd-wallpaper-wallpaper-preview.jpg',
+            'images/photo_1.jpg',
+            'images/photo_2.jpg',
+            'images/photo_3.jpg',
+            'images/photo_4.jpg',
+            'images/photo_5.jpg',
+            'images/photo_6.jpg',
+            'images/photo_7.jpg',
+            'images/photo_8.jpg',
+            'images/photo_9.jpg',
+            'images/photo_10.jpg',
+            'images/photo_11.jpg',
+            'images/photo_12.jpg',
+            'images/photo_13.jpg',
+            'images/photo_14.jpg',
             // Add image paths here
         ];
         // Loop through each hall data and image path simultaneously
