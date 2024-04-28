@@ -17,12 +17,12 @@ class SearchController extends Controller
         try {
             $halls = [];
 
-            $halls['name'] = Hall::where('name', 'like', '%' . $request->name . '%')->get();
-            $halls['location'] = Hall::where('location', 'like', '%' . $request->location . '%')->get();
+            $halls['name'] = Hall::where('name', 'like', '%' . $request->name . '%')->with('images')->get();
+            $halls['location'] = Hall::where('location', 'like', '%' . $request->location . '%')->with('images')->get();
 
             $halls['city'] = Hall::whereHas('city', function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->city_name . '%');
-            })->get();
+            })->with('images')->get();
             // results
             $results = [];
             $results['halls'] = $halls;
@@ -38,8 +38,15 @@ class SearchController extends Controller
                     $query->whereHas('city', function ($query) use ($cityName) {
                         $query->where('name', 'like', '%' . $cityName . '%');
                     });
-                })
+                })->with('images')
                 ->get();
+            $halls = $results->map(function ($hall) {
+                // Remove imageable_type and imageable_id from images
+                $hall->images()->get();
+                unset($hall->images->imageable_type);
+                unset($hall->images->imageable_id);
+                return $hall;
+            });
 
             /* $results = Hall::query()
                 ->when($request->city_name, function ($query, $cityName) {

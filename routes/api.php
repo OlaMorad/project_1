@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HallController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VerificationController;
@@ -35,6 +36,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('logout', 'logout')->name('logout')->middleware('auth');
     Route::post('refresh', 'refresh')->name('refresh')->middleware('auth');
     Route::get('Profile', 'Profile')->name('user.profile')->middleware('auth');
+    Route::post('update','update')->middleware('auth');
 });
 // login with google
 Route::controller(GoogleController::class)->group(function () {
@@ -75,4 +77,11 @@ Route::controller(HallController::class)->group(function () {
     Route::post('store', 'store')->name('store')->middleware('auth:admin');
     //delete hall
     Route::delete('halls/{id}', 'delete_hall')->middleware('auth:admin');
+    //show hall
+    Route::get('show_hall/{id}','get');
+    Route::get('show_count_halls', 'CountHalls');
+
 });
+Route::post('images/upload', [ImageController::class, 'upload']);
+Route::get('images',[ImageController::class, 'index']);
+

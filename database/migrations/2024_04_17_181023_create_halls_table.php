@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('location');
             $table->double('price');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

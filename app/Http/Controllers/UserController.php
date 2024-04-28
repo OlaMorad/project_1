@@ -41,7 +41,7 @@ class UserController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Unauthorized',
-                    401
+                
                 ]);
             }
 
@@ -97,7 +97,7 @@ class UserController extends Controller
             return response()->json(['data'=>$user, 'message' => 'User registered successfully. Please check your email for verification' ,'status'=> 'success']);
          } catch (ValidationException $e) {
                     // If validation fails, return validation errors
-            return response()->json(['data' => $e->validator->errors(), 'message' => 'Validation failed', 'status' => false], 422);
+            return response()->json(['data' => $e->validator->errors(), 'message' => 'Validation failed', 'status' => false]);
         } catch (Exception $e) {
             return response()->json(['data' => $e->getMessage(), 'message' => 'an exception occured', 'status' => 400]);
         }
@@ -254,4 +254,36 @@ class UserController extends Controller
             return $this->jsonResponse('an exception occured', $e->getMessage(), 400);
         }
     }
+    public function update(Request $request)
+    {
+        try{
+            $user = User::find(auth()->user()->id);
+            unset($user['verified_code']);
+            if (!$user) {
+                return response()->json([
+                    'message' => 'user not found',
+                    'status' => 400,
+                ]);
+            }
+           $validating = Validator::make($request->all() , [
+                'name' => 'sometimes|required',
+                'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+                'phone' => 'sometimes|required|unique:users,phone,' . $user->id,
+                'password' => 'sometimes|required|min:8|confirmed',
+           ]);
+            if ($validating->fails()) {
+                return response()->json(['errors' => $validating->errors(), 'message' => 'validating fails', 'status' => 400]);
+            }
+                $user->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'password' => $request->password,
+                  
+                ]);
+            return response()->json(['data'=>$user,'message' => 'User updated successfully.', 'status' => 'success']);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'An error occurred while updating user.', 'status' => 'error']);
+    }
+}
 }
